@@ -1,4 +1,4 @@
-package gomultisse
+package multisse
 
 import (
 	"errors"

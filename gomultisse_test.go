@@ -1,13 +1,21 @@
-package headers_test
+package multisse_test
 
 import (
 	"testing"
 
-	"github.com/oalexander-dev/go-multi-sse/headers"
+	"github.com/oalexander-dev/go-multi-sse"
 )
 
+func TestNewManager(t *testing.T) {
+	mgr := multisse.New()
+
+	if len(mgr.Streams) != 0 {
+		t.Error("Unexpected streams after initializing manager")
+	}
+}
+
 func TestGetHeaders(t *testing.T) {
-	results := headers.GetSSEHeaders()
+	results := multisse.GetSSEHeaders()
 
 	for _, hdr := range results {
 		var expected string

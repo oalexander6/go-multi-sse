@@ -1,4 +1,4 @@
-package headers
+package multisse
 
 type Header struct {
 	Key string
