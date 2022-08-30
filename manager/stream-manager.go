@@ -6,12 +6,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// StreamManager is the top-level component of this package. It keeps track of living
+// event streams and kills them when they become unused.
 type StreamManager struct {
 	Streams  map[primitive.ObjectID]EventStream
 	DoneChan chan primitive.ObjectID
 }
 
-// Initializes a new stream manager for incoming connections
+// Initializes and returns a new stream manager for incoming connections.
 func New() *StreamManager {
 	mgr := StreamManager{
 		Streams:  make(map[primitive.ObjectID]EventStream),
@@ -23,7 +25,8 @@ func New() *StreamManager {
 	return &mgr
 }
 
-// Returns an existing stream or creates a new stream
+// Returns an existing stream or creates a new stream with the provided streamId as 
+// the associated ID.
 func (mgr *StreamManager) GetStream(streamId primitive.ObjectID) (*EventStream, error) {
 	// Ignore "nil" ObjectID if asked for
 	if streamId == primitive.NilObjectID {
@@ -37,7 +40,7 @@ func (mgr *StreamManager) GetStream(streamId primitive.ObjectID) (*EventStream, 
 	return NewClient(streamId, mgr.DoneChan), nil
 }
 
-// Waits for a stream to send a done message then deletes it
+// Waits for a stream to send a done message then deletes it.
 func (mgr *StreamManager) ClearUnusedStreams() {
 	for {
 		doneId := <-mgr.DoneChan

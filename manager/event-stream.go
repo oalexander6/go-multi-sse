@@ -4,8 +4,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// ClientChan is an alias for a string channel. It is used by being sent over
+// other channels to communicate about clients.
 type ClientChan chan string
 
+// EventStream represents a living event stream. It tracks its own ID, channels
+// for communicating about new or closed client connections, living channels,
+// and a channel for sending messages.
 type EventStream struct {
 	Id               primitive.ObjectID
 	Message          chan string
